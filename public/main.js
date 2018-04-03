@@ -1,9 +1,13 @@
+var key;
 $(document).ready(function () {
     setTimeout(function () {
         if(Cookies.get('session') == 'active') {
             $('#info-card').hide();
             $('#new-card').hide();
             $('#ranking-card').show();
+            new Fingerprint2().get(function(result, components) {
+                key = result;
+            })
         }
     }, 50);
 

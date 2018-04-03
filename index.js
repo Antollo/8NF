@@ -1,3 +1,7 @@
+//var mongodb = require('mongodb');
+//var MongoClient = mongodb.MongoClient;
+//var url = process.env.MONGOLAB_URI;
+
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -39,7 +43,7 @@ app.get('/', function (req, res) {
             newFilm.children().eq(0).text(film.title);
             newFilm.children().eq(1).text(Object.keys(film.votes).length);
             newFilm.children().eq(2).children().attr('onclick', 'location.href="' + film.link + '";');
-            newFilm.children().eq(3).children().attr('onclick', '$.post("vote", {title: "' + film.title + '" }, function(data, status){ $(".mdl-js-snackbar")[0].MaterialSnackbar.showSnackbar({message: data});});re()');
+            newFilm.children().eq(3).children().attr('onclick', '$.post("vote", {title: "' + film.title + '", fingerprint: key}, function(data, status){ $(".mdl-js-snackbar")[0].MaterialSnackbar.showSnackbar({message: data});});re()');
             $('#table').append(newFilm);
         });
         data = '<html>' + $('html').html() + '</html>'
@@ -71,14 +75,14 @@ app.post('/add', urlencodedParser, function (req, res) {
 
 app.post('/vote', urlencodedParser, function (req, res) {
     var result = films.filter(function(film) {
-        return film.title == req.body.title;
+        return film.title == $("<div>").html(req.body.title).text();
     });
     result.forEach(function(film) {
-        film.votes[req.connection.remoteAddress] = 1;
+        film.votes[$("<div>").html(req.body.fingerprint).text()] = 1;
     })
     res.send('Głosowanie udało się.');
     console.log(films);
-    console.log(req.connection.remoteAddress);
+    console.log($("<div>").html(req.body.fingerprint).text());
     save();
 });
 
