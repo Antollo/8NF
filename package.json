@@ -1,0 +1,18 @@
+{
+  "name": "8nf",
+  "version": "1.0.0",
+  "description": "App for 8NF event.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antoni Nowinowski",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "http": "0.0.0"
+  }
+}
