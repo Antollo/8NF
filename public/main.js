@@ -1,9 +1,11 @@
 $(document).ready(function () {
-    if(Cookies.get('session') == 'active') {
-        $('#info-card').hide();
-        $('#new-card').hide();
-        $('#ranking-card').show();
-    }
+    setTimeout(function () {
+        if(Cookies.get('session') == 'active') {
+            $('#info-card').hide();
+            $('#new-card').hide();
+            $('#ranking-card').show();
+        }
+    }, 50);
 
     $('#agree-button').click(function() {
         $('#info-card').hide();
