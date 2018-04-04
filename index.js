@@ -1,6 +1,6 @@
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
-var url = process.env.MONGOLAB_URI;
+var url = "mongodb://Lenessia:2loghorizon2@ds013405.mlab.com:13405/noc-filmowa";//process.env.MONGOLAB_URI;
 
 var express = require('express');
 var app = express();
@@ -13,7 +13,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var port = process.env.PORT || 3000;
 
 var films = [];
-//read();
+read();
 
 var line = `
 <tr>
@@ -93,7 +93,7 @@ function save() {
 	MongoClient.connect(url, function(err, db) {
       if (err) throw err;
       var dbo = db.db("noc-filmowa");
-      dbo.collection("table").updateOne({}, films, function(err, res) {
+      dbo.collection("table").updateOne({}, {$set: {table: films}}, function(err, res) {
           if (err) throw err;
           console.log("1 document updated");
           db.close();
@@ -111,7 +111,7 @@ function read() {
         var dbo = db.db("noc-filmowa");
         dbo.collection("table").findOne({}, function(err, result) {
             if (err) throw err;
-            films = result;
+            films = result.table;
             db.close();
         });
     });
