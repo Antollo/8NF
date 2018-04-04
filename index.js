@@ -1,6 +1,6 @@
-//var mongodb = require('mongodb');
-//var MongoClient = mongodb.MongoClient;
-//var url = process.env.MONGOLAB_URI;
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
+var url = process.env.MONGOLAB_URI;
 
 var express = require('express');
 var app = express();
@@ -13,7 +13,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var port = process.env.PORT || 3000;
 
 var films = [];
-read();
+//read();
 
 var line = `
 <tr>
@@ -90,16 +90,34 @@ var server = app.listen(port, function () {
 });
 
 function save() {
-    fs.writeFile('base.txt', JSON.stringify(films), function (err) {
-        if (err) throw err;
-        console.log('Done');
+	MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      var dbo = db.db("noc-filmowa");
+      dbo.collection("table").updateOne({}, films, function(err, res) {
+          if (err) throw err;
+          console.log("1 document updated");
+          db.close();
+      });
     });
+    //fs.writeFile('base.txt', JSON.stringify(films), function (err) {
+    //    if (err) throw err;
+    //    console.log('Done');
+    //});
 }
 
 function read() {
-    fs.readFile('base.txt', function (err, data) {
+	MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        films = JSON.parse(data);
-        console.log('Done');
+        var dbo = db.db("noc-filmowa");
+        dbo.collection("table").findOne({}, function(err, result) {
+            if (err) throw err;
+            films = result;
+            db.close();
+        });
     });
+    //fs.readFile('base.txt', function (err, data) {
+    //    if (err) throw err;
+    //    films = JSON.parse(data);
+    //    console.log('Done');
+    //});
 }
