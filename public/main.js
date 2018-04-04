@@ -25,19 +25,28 @@ $(document).ready(function () {
     });
 
     $('#add').click(function() {
+        if($("<div>").html($('#title').val()).text().length !=0 && $("<div>").html($('#link').val()).text().length != 0 && $("<div>").html($('#link').val()).text().indexOf('http') != -1)
+        {
+            $('#info-card').hide();
+            $('#new-card').hide();
+            $('#ranking-card').show();
+            $.post("add",
+            {
+                title: $('#title').val(),
+                link: $('#link').val()
+            },
+            function(data, status){
+                $('.mdl-js-snackbar')[0].MaterialSnackbar.showSnackbar({message: data});
+                re()
+            });
+        }
+    });
+
+    $('#back').click(function() {
         $('#info-card').hide();
         $('#new-card').hide();
         $('#ranking-card').show();
-        $.post("add",
-        {
-            title: $('#title').val(),
-            link: $('#link').val()
-        },
-        function(data, status){
-            $('.mdl-js-snackbar')[0].MaterialSnackbar.showSnackbar({message: data});
-            re()
-        });
-    })
+    });
 });
 
 function re() {

@@ -1,6 +1,7 @@
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
-var url = "mongodb://Lenessia:2loghorizon2@ds013405.mlab.com:13405/noc-filmowa";//process.env.MONGOLAB_URI;
+var url = process.env.BASE;
+console.log(url);
 
 var express = require('express');
 var app = express();
@@ -40,7 +41,7 @@ app.get('/', function (req, res) {
         films.sort(function(b, a){return Object.keys(a.votes).length - Object.keys(b.votes).length});
         films.forEach(function(film) {
             var newFilm = $(line);
-            newFilm.children().eq(0).text(film.title);
+            newFilm.children().eq(0).html('<div class="inner">' + film.title + '</div>');
             newFilm.children().eq(1).text(Object.keys(film.votes).length);
             newFilm.children().eq(2).children().attr('onclick', 'location.href="' + film.link + '";');
             newFilm.children().eq(3).children().attr('onclick', '$.post("vote", {title: "' + film.title + '", fingerprint: key}, function(data, status){ $(".mdl-js-snackbar")[0].MaterialSnackbar.showSnackbar({message: data});});re()');
@@ -54,17 +55,13 @@ app.get('/', function (req, res) {
 });
 
 app.get('/base', function (req, res) {
-    fs.readFile('base.txt', function (err, data) {
-        if (err) throw err;
-        res.send(data)
-        console.log('Done');
-    });
+    res.send(films);
 });
 
 app.post('/add', urlencodedParser, function (req, res) {
     var film = {
         title: $("<div>").html(req.body.title).text(),
-        link: $("<div>").html(req.body.link).text(),
+        link: $("<div>").html(req.body.link).text().replace('"','').replace(';',''),
         votes: {}
     };
     films.push(film);

@@ -17,6 +17,16 @@
     width: 100%;
 }
 
+.inner {
+    max-width: 200px;
+    word-wrap: break-word;
+    white-space: initial;
+}
+
+tr, th, td {
+    padding: 16px !important;
+}
+
 #new-card {
     display: none;
 }
