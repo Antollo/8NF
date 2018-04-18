@@ -1,15 +1,22 @@
 var key;
 $(document).ready(function () {
     setTimeout(function () {
-        if(Cookies.get('session') == 'active') {
-            $('#info-card').hide();
-            $('#new-card').hide();
-            $('#ranking-card').show();
-            new Fingerprint2().get(function(result, components) {
-                key = result;
-            })
+        if(window['canRunAds'] === undefined) 
+        {
+            $('.mdl-js-snackbar')[0].MaterialSnackbar.showSnackbar({message: 'Wyłącz adblock\'a i odśwież stronę. Adblock blokuje skrypty niezbędne do identyfikacji użytkownika.', actionHandler: function(event) {location.reload();}, actionText: 'Odśwież', timeout: 60000});
+        } else {
+            $('#loading-screen').hide();
+            $('#main-screen').show();
+            if(Cookies.get('session') == 'active') {
+                $('#info-card').hide();
+                $('#new-card').hide();
+                $('#ranking-card').show();
+                new Fingerprint2().get(function(result, components) {
+                    key = result;
+                })
+            }
         }
-    }, 50);
+    }, 200);
 
     $('#agree-button').click(function() {
         $('#info-card').hide();
@@ -25,11 +32,8 @@ $(document).ready(function () {
     });
 
     $('#add').click(function() {
-        if($("<div>").html($('#title').val()).text().length !=0 && $("<div>").html($('#link').val()).text().length != 0 && $("<div>").html($('#link').val()).text().indexOf('http') != -1)
+        if($("<div>").html($('#title').val()).text().length !=0 && $("<div>").html($('#link').val()).text().length != 0 && $("<div>").html($('#link').val()).text().indexOf('http') != -1 && !$('#link').parent().hasClass('is-invalid'))
         {
-            $('#info-card').hide();
-            $('#new-card').hide();
-            $('#ranking-card').show();
             $.post("add",
             {
                 title: $('#title').val(),
@@ -39,6 +43,8 @@ $(document).ready(function () {
                 $('.mdl-js-snackbar')[0].MaterialSnackbar.showSnackbar({message: data});
                 re()
             });
+        } else {
+            $('.mdl-js-snackbar')[0].MaterialSnackbar.showSnackbar({message: 'Tytuł jest pusty lub link nieprawidłowy.'});
         }
     });
 
@@ -50,7 +56,9 @@ $(document).ready(function () {
 });
 
 function re() {
+    $('#loading-screen').show();
+    $('#main-screen').hide();
     setTimeout(function() {
         location.reload();
-    }, 2000);
+    }, 2500);
 }

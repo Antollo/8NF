@@ -8,6 +8,11 @@
     z-index: 900;
 }
 
+.centrify {
+    margin: auto;
+    display: flex;
+}
+
 .mdl-card__title-text {
     font-family: Barrio;
     font-size: 36px;
@@ -23,6 +28,14 @@
     white-space: initial;
 }
 
+.mdl-card__supporting-text {
+    width: calc(100% - 32px);
+}
+
+.mdl-data-table {
+    min-width: 100%;
+}
+
 tr, th, td {
     padding: 16px !important;
 }
@@ -32,5 +45,9 @@ tr, th, td {
 }
 
 #ranking-card {
+    display: none;
+}
+
+#main-screen {
     display: none;
 }

@@ -44,7 +44,7 @@ app.get('/', function (req, res) {
             newFilm.children().eq(0).html('<div class="inner">' + film.title + '</div>');
             newFilm.children().eq(1).text(Object.keys(film.votes).length);
             newFilm.children().eq(2).children().attr('onclick', 'location.href="' + film.link + '";');
-            newFilm.children().eq(3).children().attr('onclick', '$.post("vote", {title: "' + film.title + '", fingerprint: key}, function(data, status){ $(".mdl-js-snackbar")[0].MaterialSnackbar.showSnackbar({message: data});});re()');
+            newFilm.children().eq(3).children().attr('onclick', '$.post("vote", {title: "' + film.title + '", fingerprint: key}, function(data, status){ $(".mdl-js-snackbar")[0].MaterialSnackbar.showSnackbar({message: data});re();});');
             $('#table').append(newFilm);
         });
         data = '<html>' + $('html').html() + '</html>'
@@ -75,12 +75,14 @@ app.post('/vote', urlencodedParser, function (req, res) {
         return film.title == $("<div>").html(req.body.title).text();
     });
     result.forEach(function(film) {
-        film.votes[$("<div>").html(req.body.fingerprint).text()] = 1;
-    })
-    res.send('Głosowanie udało się.');
-    console.log(films);
-    console.log($("<div>").html(req.body.fingerprint).text());
-    save();
+        if(film.votes[$("<div>").html(req.body.fingerprint).text()] === undefined) {
+            film.votes[$("<div>").html(req.body.fingerprint).text()] = 1;
+            res.send('Głosowanie udało się.');
+            save();
+        } else {
+            res.send('Już na to głosowałeś!');
+        }
+    });
 });
 
 var server = app.listen(port, function () {
