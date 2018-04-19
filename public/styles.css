@@ -28,12 +28,16 @@
     white-space: initial;
 }
 
+.mdl-card {
+    max-width: calc(100vw - 32px);
+}
+
 .mdl-card__supporting-text {
     width: calc(100% - 32px);
 }
 
 .mdl-data-table {
-    min-width: 100%;
+    width: 100%;
 }
 
 tr, th, td {
