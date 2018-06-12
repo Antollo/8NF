@@ -53,6 +53,34 @@ $(document).ready(function () {
         $('#new-card').hide();
         $('#ranking-card').show();
     });
+
+    //Draw  top 10 chart
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Tytuł');
+        data.addColumn('number', 'Głosy');
+        $.each($("#table > tr"), function(key, value) {
+            if (key < 10) data.addRow([$(value).children(':nth-child(1)').text(), parseInt($(value).children(':nth-child(2)').text())]);
+        })
+        var options = {
+        chart: {},
+        bars: 'horizontal',
+        legend: {position: 'none'},
+        colors: ['rgb(233,30,99)']
+    };
+        var chart = new google.charts.Bar(document.getElementById('chart-div'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+    console.log(`
+"Ty pojedziesz w daleką, nieznajomą drogę;
+Będziesz w wielkich, bogatych i rozumnych tłumie,
+Szukaj męża, co więcej niźli oni umie;
+Poznasz, bo cię powita pierwszy w Imię Boże.
+Słuchaj, co powie…"
+    Adam Mickiewicz "Dziady", część III
+    `);
 });
 
 function re() {

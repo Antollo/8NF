@@ -55,3 +55,7 @@ tr, th, td {
 #main-screen {
     display: none;
 }
+
+#chart-div {
+    height: 500px;
+}
