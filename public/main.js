@@ -11,9 +11,11 @@ $(document).ready(function () {
                 $('#info-card').hide();
                 $('#new-card').hide();
                 $('#ranking-card').show();
+                $('#chart-card').show();
                 new Fingerprint2().get(function(result, components) {
                     key = result;
                 })
+                startChart();
             }
         }
     }, 200);
@@ -22,7 +24,9 @@ $(document).ready(function () {
         $('#info-card').hide();
         $('#new-card').hide();
         $('#ranking-card').show();
+        $('#chart-card').show();
         Cookies.set('session','active');
+        startChart();
     });
 
     $('#floating').click(function() {
@@ -54,25 +58,6 @@ $(document).ready(function () {
         $('#ranking-card').show();
     });
 
-    //Draw  top 10 chart
-    google.charts.load('current', {'packages':['bar']});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Tytuł');
-        data.addColumn('number', 'Głosy');
-        $.each($("#table > tr"), function(key, value) {
-            if (key < 10) data.addRow([$(value).children(':nth-child(1)').text(), parseInt($(value).children(':nth-child(2)').text())]);
-        })
-        var options = {
-        chart: {},
-        bars: 'horizontal',
-        legend: {position: 'none'},
-        colors: ['rgb(233,30,99)']
-    };
-        var chart = new google.charts.Bar(document.getElementById('chart-div'));
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-    }
     console.log(`
 "Ty pojedziesz w daleką, nieznajomą drogę;
 Będziesz w wielkich, bogatych i rozumnych tłumie,
@@ -89,4 +74,26 @@ function re() {
     setTimeout(function() {
         location.reload();
     }, 2500);
+}
+
+function startChart() {
+    //Draw  top 10 chart
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Tytuł');
+        data.addColumn('number', 'Głosy');
+        $.each($("#table > tr"), function(key, value) {
+            if (key < 10) data.addRow([$(value).children(':nth-child(1)').text(), parseInt($(value).children(':nth-child(2)').text())]);
+        })
+        var options = {
+            chart: {},
+            bars: 'horizontal',
+            legend: {position: 'none'},
+            colors: ['rgb(233,30,99)']
+        };
+        var chart = new google.charts.Bar(document.getElementById('chart-div'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
 }
