@@ -5,6 +5,7 @@ $(document).ready(function () {
         $('#new-card').hide();
         $('#ranking-card').show();
         $('#chart-card').show();
+        $('#floating').show();
         startChart();
     }
     setTimeout(function () {

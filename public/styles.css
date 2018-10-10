@@ -6,6 +6,7 @@
     margin-right: 40px;
     margin-bottom: 40px;
     z-index: 900;
+    display: none;
 }
 
 .centrify {
@@ -34,12 +35,12 @@
 
 .mdl-card__supporting-text{
     width: calc(100% - 32px);
-    color: #3c4043;
+    color: rgba(0,0,0,.54);
     font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 text {
-    fill: #3c4043;
+    fill: rgba(0,0,0,.54);
     font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
 }
 
