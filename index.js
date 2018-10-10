@@ -109,7 +109,7 @@ app.get('/validate/:key', function (req, res) {
 app.post('/vote', urlencodedParser, function (req, res) {
     var filmTitle = $("<div>").html(req.body.title).text();
     var userMail = req.body.mail;
-    if (userMail.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(hotmail.com|gmail.com)$/)) {
+    if (userMail.match(/^[a-zA-Z0-9.!#$%&'*/=?^_`{|}~-]+@(hotmail.com|gmail.com)$/)) {
         var hashed = hash(filmTitle+userMail);
         transporter.sendMail(
         {
