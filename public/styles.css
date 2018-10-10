@@ -32,8 +32,15 @@
     max-width: calc(100vw - 32px);
 }
 
-.mdl-card__supporting-text {
+.mdl-card__supporting-text{
     width: calc(100% - 32px);
+    color: #3c4043;
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+text {
+    fill: #3c4043;
+    font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .mdl-data-table {
@@ -62,4 +69,29 @@ tr, th, td {
 
 #chart-div {
     height: 500px;
+}
+
+.mdl-card {
+    border-radius: 18px;
+    min-height: 36px;
+}
+
+.mdl-button {
+    border-radius: 18px;
+}
+
+.mdl-button--fab {
+    border-radius: 100%;
+}
+
+.multicolumn {
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
+    text-align: center;
+}
+
+h5 {
+    margin-block-start: 16px;
+    margin-block-end: 16px;
 }
