@@ -95,6 +95,9 @@ tr, th, td {
 h5 {
     margin-block-start: 16px;
     margin-block-end: 16px;
-    color:black;
-    font-weight: 300;
+    color: #3c4043;
+}
+
+.mdl-textfield__input {
+    color: #3c4043;
 }

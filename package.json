@@ -10,12 +10,12 @@
   "author": "Antoni Nowinowski",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "fs": "0.0.1-security",
     "http": "0.0.0",
-    "mongodb": "^3.0.5",
+    "mongodb": "^3.1.8",
     "nodemailer": "^4.6.8"
   }
 }
