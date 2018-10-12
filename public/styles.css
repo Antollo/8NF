@@ -108,6 +108,9 @@ h5 {
     bottom: 50%;
     z-index: 1000;
 }
+#spinner > * {
+    display: none;
+}
 
 #darken {
     display: none;

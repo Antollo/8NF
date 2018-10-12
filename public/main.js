@@ -27,6 +27,7 @@ $(document).ready(function () {
     function reloadData() {
         if ($('#ranking-card').css('display') == 'none') return;
         $('#spinner').show();
+        $('#spinner > *').show();
         $('#darken').show();
         $.getJSON('base', function (data) {
             $("#table").empty();
@@ -73,6 +74,7 @@ $(document).ready(function () {
             var chart = new google.charts.Bar(document.getElementById('chart-div'));
             chart.draw(data, google.charts.Bar.convertOptions(options));
             $('#spinner').hide();
+            $('#spinner > *').hide();
             $('#darken').hide();
         });
     }
