@@ -37,11 +37,13 @@
     width: calc(100% - 32px);
     color: rgba(0,0,0,.54);
     font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: 400;
 }
 
 text {
     fill: rgba(0,0,0,.54);
     font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: 400;
 }
 
 .mdl-data-table {
@@ -64,10 +66,6 @@ tr, th, td {
     display: none;
 }
 
-#main-screen {
-    display: none;
-}
-
 #chart-div {
     height: 500px;
 }
@@ -86,8 +84,8 @@ tr, th, td {
 }
 
 .multicolumn {
-    -webkit-column-count: 2; /* Chrome, Safari, Opera */
-    -moz-column-count: 2; /* Firefox */
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
     column-count: 2;
     text-align: center;
 }
@@ -100,4 +98,25 @@ h5 {
 
 .mdl-textfield__input {
     color: #3c4043;
+}
+
+#spinner {
+    display: none;
+    position: fixed;
+    display: block;
+    right: 50%;
+    bottom: 50%;
+    z-index: 1000;
+}
+
+#darken {
+    display: none;
+    background: #000;
+	opacity: 0.5;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
 }

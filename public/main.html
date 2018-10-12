@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.pink-indigo.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=Barrio" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="js.cookie-2.2.0.min.js"></script>
@@ -24,17 +25,11 @@
         <button class="mdl-snackbar__action mdl-color-text--pink" type="button"></button>
     </div>
     <div>
-        <div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-200" id="loading-screen">
-            <main class="mdl-layout__content centrify">
-                <div class="mdl-spinner mdl-js-spinner is-active centrify"></div>
-            </main>
-        </div>
-
         <div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-200" id="main-screen">
             <main class="mdl-layout__content">
                 <section class="mdl-grid">
                     <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop">
-                        <img src="logo8NF.png" height="128px"> Testowe uruchomienie serwisu - druga iteracja
+                        <img src="logo8NF.png" height="128px"> Testowe uruchomienie serwisu - trzecia iteracja
                     </div>
                     <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="info-card">
                         <div class="mdl-card__title">
@@ -47,7 +42,8 @@
                             Liczymy na waszą kreatywność i dobry gust.
                             <h5>Sposób głosowania</h5>
                             Po kliknięciu przycisku do głosownania (<i class="material-icons" style="width:1rem;height:1rem;font-size:1rem;">thumb_up</i>)
-                            na twój adres mailowy zostanie przysłana wiadomość z linkiem do potwierdzenia głosu. Trzeba go kliknąć
+                            na twój adres mailowy zostanie przysłana wiadomość z linkiem do potwierdzenia głosu. Trzeba
+                            go kliknąć
                             i to wszystko.
                             <h5>Więcej</h5>
                             Werefikację mailową stosujemy w celu zapewnienia autentyczności głosów.
@@ -69,7 +65,8 @@
                             </div>
                         </div>
                         <div class="mdl-card__actions">
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="agree-button">Ok, wchodzę w to</a>
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="agree-button">Ok,
+                                wchodzę w to</a>
                         </div>
                     </div>
                     <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="new-card">
@@ -79,7 +76,8 @@
                         <div class="mdl-card__supporting-text">
                             <div>
                                 Link do opisu filmu pomoże innym zdecydować o jakości
-                                twojej propozycji.
+                                twojej propozycji, ponadto z wspierających to witryn (Filmweb,
+                                IMDb, MAL ...) zostanie pobrana ocena filmu.
                             </div>
                             <br>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -92,6 +90,12 @@
                                 <label class="mdl-textfield__label" for="link">Link do opisu filmu</label>
                                 <span class="mdl-textfield__error">To nie wygląda jak prawidłowy link!</span>
                             </div>
+                            <img id="captcha-img" />
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input class="mdl-textfield__input" type="text" id="captcha" />
+                                <label class="mdl-textfield__label" for="captcha">Cyfry na obrazku powyżej</label>
+                            </div>
+
                         </div>
                         <div class="mdl-card__actions">
                             <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="add">Dodaj</a>
@@ -103,6 +107,11 @@
                             <h2 class="mdl-card__title-text">TOP 10</h2>
                         </div>
                         <div class="mdl-card__supporting-text" id="chart-div">
+                        </div>
+                        <div class="mdl-card__menu">
+                            <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect reload">
+                                <i class="material-icons">refresh</i>
+                            </button>
                         </div>
                     </div>
 
@@ -116,6 +125,7 @@
                                     <tr>
                                         <th class="mdl-data-table__cell--non-numeric">Tytuł</th>
                                         <th>Głosy</th>
+                                        <th>Ocena</th>
                                         <th class="mdl-data-table__cell--non-numeric">Link</th>
                                         <th class="mdl-data-table__cell--non-numeric">Głosuj</th>
                                     </tr>
@@ -124,7 +134,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mdl-card__actions">
+                        <div class="mdl-card__menu">
+                            <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect reload">
+                                <i class="material-icons">refresh</i>
+                            </button>
                         </div>
                     </div>
                     <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="fb-card">
@@ -140,7 +153,8 @@
                         </div>
                         <div class="mdl-card__actions">
                             <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="fb-button"
-                                onclick="location.href='https://www.facebook.com/szru8lo'">Odwiedź profil SzRU na facebook'u</a>
+                                onclick="location.href='https://www.facebook.com/szru8lo'">Odwiedź profil SzRU na
+                                facebook'u</a>
                         </div>
                     </div>
                     <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--primary mdl-shadow--4dp"
@@ -151,6 +165,8 @@
             </main>
         </div>
     </div>
+    <div id="spinner" class="mdl-spinner mdl-js-spinner is-active"></div>
+    <div id="darken"></div> 
 </body>
 
 </html>

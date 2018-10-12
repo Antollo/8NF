@@ -4,18 +4,20 @@ var url = process.env.BASE;
 
 var express = require('express');
 var app = express();
+var https = require('https');
 var http = require('http').Server(app);
 var fs = require('fs');
 var cheerio = require('cheerio')
 var $ = cheerio.load('');
+var captchapng = require('captchapng');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var port = process.env.PORT || 3000;
 
 var nodemailer = require('nodemailer');
 var botMailAddress = 'lenezjastankoska@gmail.com';
-var appAddress = 'https://noc-filmowa.herokuapp.com/';
-//var appAddress = 'http://localhost:3000/';
+//var appAddress = 'https://noc-filmowa.herokuapp.com/';
+var appAddress = 'http://localhost:3000/';
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -26,13 +28,10 @@ var transporter = nodemailer.createTransport({
 });
 
 var codeToVote = new Map();
+var captchaToValue = new Map();
+var ratingCache = new Map();
 
-var lineHTML, responseHTML;
-fs.readFile(__dirname + '/line.html', 'utf8', function (err, data) {
-    if (err) throw err;
-    lineHTML = data;
-    console.log('row.html loaded');
-});
+var responseHTML;
 fs.readFile(__dirname + '/res.html', 'utf8', function (err, data) {
     if (err) throw err;
     responseHTML = data;
@@ -42,42 +41,20 @@ fs.readFile(__dirname + '/res.html', 'utf8', function (err, data) {
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
-    fs.readFile(__dirname + '/public/main.html', 'utf8', function (err, data) {
-        if (err) throw err;
-        $ = cheerio.load(data);
+    res.sendFile(__dirname + '/public/main.html');
+});
 
-        MongoClient.connect(url, function (err, db) {
-            if (err) throw err;
-            var dbo = db.db('noc-filmowa');
-            var cursor = dbo.collection('films').aggregate([
-                {
-                    $project: {
-                        title: 1,
-                        link: 1,
-                        votes: 1,
-                        votesCount: { $size: '$votes' }
-                    }
-                },
-                { $sort: { votesCount: -1 } },
-                { $limit: 500 }
-            ]);
-            cursor.on("data", function (data) {
-                var newFilm = $(lineHTML);
-                newFilm.children().eq(0).html('<div class="inner">' + data.title + '</div>');
-                newFilm.children().eq(1).text(Object.keys(data.votes).length);
-                newFilm.children().eq(2).children().attr('onclick', 'location.href="' + data.link + '";');
-                newFilm.children().eq(3).children().attr('onclick', '$.post("vote", {title: "' + data.title + '", mail: mail}, function(data, status){ $(".mdl-js-snackbar")[0].MaterialSnackbar.showSnackbar({message: data});});');
-                $('#table').append(newFilm);
-            });
-            cursor.on("end", function () {
-                db.close();
-                data = '<html>' + $('html').html() + '</html>'
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.write(data);
-                res.end();
-            });
-        });
-    });
+app.get('/captcha', function (req, res) {
+    var value = Math.random() * 9000 + 1000;
+    var p = new captchapng(80, 27, parseInt(value));
+    p.color(0, 0, 0, 0);
+    p.color(0, 0, 0, 137);
+
+    var img = p.getBase64();
+    //var imgbase64 = new Buffer(img, 'base64');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end('{"img":"data:image/png;base64,' + img + '"}');
+    captchaToValue.set('data:image/png;base64,' + img, parseInt(value).toString());
 });
 
 app.get('/base', function (req, res) {
@@ -89,7 +66,6 @@ app.get('/base', function (req, res) {
                 $project: {
                     title: 1,
                     link: 1,
-                    votes: 1,
                     votesCount: { $size: '$votes' }
                 }
             },
@@ -99,7 +75,10 @@ app.get('/base', function (req, res) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         var first = true;
         cursor.on("data", function (data) {
-            if (first) res.write('[' + JSON.stringify(data));
+            if (first) {
+                res.write('[' + JSON.stringify(data));
+                first = false;
+            }
             else res.write(',\n' + JSON.stringify(data));
         });
         cursor.on("end", function () {
@@ -117,7 +96,14 @@ app.post('/add', urlencodedParser, function (req, res) {
         link: $("<div>").html(req.body.link).text().replace('"', '').replace(';', ''),
         votes: []
     };
-    MongoClient.connect(url, function (err, db) {
+    if (film.title.length > 64) {
+        film.title = film.title.substring(0, 64) + '...';
+    }
+
+    if (captchaToValue.get(req.body.captcha) != req.body.value.replace(/\s/g, '')) {
+        res.send('Błąd w przepisanych cyfrach')
+    }
+    else MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db('noc-filmowa');
         dbo.collection('films').findOne({ title: film.title }, function (err, result) {
@@ -165,6 +151,21 @@ app.get('/validate/:key', function (req, res) {
             }
         });
     });
+});
+
+app.post('/rating', urlencodedParser, function (req, res) {
+    var str = '';
+    if (ratingCache.get(req.body.url)) res.send(ratingCache.get(req.body.url));
+    else https.get(req.body.url, function (response) {
+        response.on('data', function (chunk) { str += chunk; });
+        response.on('end', function () {
+            $ = cheerio.load(str);
+            var rating = $('[itemprop="ratingValue"]').text().trim().replace('.', ',');
+            ratingCache.set(req.body.url, rating);
+            res.send(rating);
+        });
+    })
+
 });
 
 app.post('/vote', urlencodedParser, function (req, res) {
