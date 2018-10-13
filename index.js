@@ -18,8 +18,8 @@ var port = process.env.PORT || 3000;
 
 var nodemailer = require('nodemailer');
 var botMailAddress = 'lenezjastankoska@gmail.com';
-//var appAddress = 'https://noc-filmowa.herokuapp.com/';
-var appAddress = 'http://localhost:3000/';
+var appAddress = 'https://noc-filmowa.herokuapp.com/';
+//var appAddress = 'http://localhost:3000/';
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
