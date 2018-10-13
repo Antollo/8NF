@@ -25,7 +25,7 @@ var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: botMailAddress,
-        pass: process.env.BASE.substring(19, 31)
+        pass: process.env.BASE.substring(20, 32)
     }
 });
 
@@ -96,24 +96,41 @@ app.post('/add', urlencodedParser, function (req, res) {
     if (film.title.length > 64) {
         film.title = film.title.substring(0, 64) + '...';
     }
-    if (captchaToValue.get(req.body.hash) != req.body.value.replace(/\s/g, '')) {
-        res.send('Błąd w przepisanych znakach')
-    }
-    else MongoClient.connect(url, function (err, db) {
-        if (err) throw err;
-        var dbo = db.db('noc-filmowa');
-        dbo.collection('films').findOne({ title: film.title }, function (err, result) {
+    if (typeof req.body.title == 'string' && typeof req.body.link == 'string'
+        && typeof req.body.hash == 'string' && typeof req.body.value == 'string'
+        && req.body.hash.length && req.body.value.length) {
+
+        if (captchaToValue.get(req.body.hash) != req.body.value.replace(/\s/g, '')) {
+            res.send('Błąd w przepisanych znakach');
+            console.log('rejected');
+        }
+        else MongoClient.connect(url, function (err, db) {
             if (err) throw err;
-            if (result) {
-                db.close();
-                res.send('Już dodano ten film');
-            } else {
-                dbo.collection('films').insertOne(film);
-                db.close();
-                res.send('Dodawanie udało się');
-            }
+            var dbo = db.db('noc-filmowa');
+            dbo.collection('films').findOne({ title: film.title }, function (err, result) {
+                if (err) throw err;
+                if (result) {
+                    db.close();
+                    res.send('Już dodano ten film');
+                    console.log('rejected');
+                } else {
+                    dbo.collection('films').insertOne(film);
+                    db.close();
+                    res.send('Dodawanie udało się');
+                    console.log('added');
+                }
+            });
         });
-    });
+    } else {
+        res.send('Błędne zapytanie');
+        console.log('rejected');
+        /*console.log(typeof req.body.title == 'string');
+        console.log(typeof req.body.link == 'string');
+        console.log(typeof req.body.hash == 'string');
+        console.log(typeof req.body.value == 'string');
+        console.log(req.body.hash.length);
+        console.log(req.body.value.length);*/
+    }
 });
 
 app.get('/validate/:key', function (req, res) {
