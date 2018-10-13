@@ -51,7 +51,7 @@ text {
 }
 
 tr, th, td {
-    padding: 8px !important;
+    padding: 16px 8px 16px 8px !important;
 }
 
 #new-card {
@@ -123,3 +123,10 @@ h5 {
 	height: 100%;
 	z-index: 999;
 }
+
+/*#info-card > .mdl-card__title {
+    color: #fff;
+    height: 170px;
+    background-color: rgb(233,30,99); 
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" style="padding: 16px" width="36" height="36" viewBox="0 0 32 32"><defs><style type="text/css">@import url(http://fonts.googleapis.com/css?family=Barrio);</style></defs><text fill="black" style="font-family: Barrio;font-size: 32px;font-weight: bold;writing-mode: tb;">8</text></svg>');
+}*/

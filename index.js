@@ -9,7 +9,9 @@ var http = require('http').Server(app);
 var fs = require('fs');
 var cheerio = require('cheerio')
 var $ = cheerio.load('');
-var captchapng = require('captchapng');
+var svgCaptcha = require('svg-captcha');
+svgCaptcha.options.width = 240;
+svgCaptcha.options.height = 60;
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 var port = process.env.PORT || 3000;
@@ -45,16 +47,10 @@ app.get('/', function (req, res) {
 });
 
 app.get('/captcha', function (req, res) {
-    var value = Math.random() * 9000 + 1000;
-    var p = new captchapng(80, 27, parseInt(value));
-    p.color(0, 0, 0, 0);
-    p.color(0, 0, 0, 137);
-
-    var img = p.getBase64();
-    //var imgbase64 = new Buffer(img, 'base64');
+    var captcha = svgCaptcha.create({ size: 8, ignoreChars: 'O0o1il', noise: 0 });
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end('{"img":"data:image/png;base64,' + img + '"}');
-    captchaToValue.set('data:image/png;base64,' + img, parseInt(value).toString());
+    res.end(JSON.stringify({ svg: captcha.data, hash: hash(captcha.data).toString() }));
+    captchaToValue.set(hash(captcha.data).toString(), captcha.text);
 });
 
 app.get('/base', function (req, res) {
@@ -70,13 +66,14 @@ app.get('/base', function (req, res) {
                 }
             },
             { $sort: { votesCount: -1 } },
-            { $limit: 500 }
+            { $limit: 100 }
         ]);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         var first = true;
+        res.write('[');
         cursor.on("data", function (data) {
             if (first) {
-                res.write('[' + JSON.stringify(data));
+                res.write(JSON.stringify(data));
                 first = false;
             }
             else res.write(',\n' + JSON.stringify(data));
@@ -99,9 +96,8 @@ app.post('/add', urlencodedParser, function (req, res) {
     if (film.title.length > 64) {
         film.title = film.title.substring(0, 64) + '...';
     }
-
-    if (captchaToValue.get(req.body.captcha) != req.body.value.replace(/\s/g, '')) {
-        res.send('Błąd w przepisanych cyfrach')
+    if (captchaToValue.get(req.body.hash) != req.body.value.replace(/\s/g, '')) {
+        res.send('Błąd w przepisanych znakach')
     }
     else MongoClient.connect(url, function (err, db) {
         if (err) throw err;

@@ -85,7 +85,8 @@ $(document).ready(function () {
     }
 
     $.getJSON('captcha', function (data) {
-        $('#captcha-img').attr('src', data.img);
+        $('#captcha-img').html(data.svg);
+        $('#captcha-img').attr('hash', data.hash);
     });
 
     setInterval(reloadData, 20000);
@@ -96,6 +97,8 @@ $(document).ready(function () {
             Cookies.set('mail', $('#mail').val());
             mail = $('#mail').val();
             $('#main-screen').scrollTop(0);
+        } else {
+            $('.mdl-js-snackbar')[0].MaterialSnackbar.showSnackbar({ message: 'Nie podałeś adresu mailowego lub jest nieprawidłowy' });
         }
     });
 
@@ -113,14 +116,17 @@ $(document).ready(function () {
                 {
                     title: $('#title').val(),
                     link: $('#link').val(),
-                    captcha: $('#captcha-img').attr('src'),
+                    hash: $('#captcha-img').attr('hash'),
                     value: $('#captcha').val()
                 },
                 function (data, status) {
                     $('.mdl-js-snackbar')[0].MaterialSnackbar.showSnackbar({ message: data });
-                    if (data == 'Dodawanie udało się') reloadData();
+                    if (data == 'Dodawanie udało się') {
+                        $('#back').click();
+                    }
                     else $.getJSON('captcha', function (data) {
-                        $('#captcha-img').attr('src', data.img);
+                        $('#captcha-img').html(data.svg);
+                        $('#captcha-img').attr('hash', data.hash);
                     });
                 });
         } else {
@@ -133,6 +139,13 @@ $(document).ready(function () {
         $('#new-card').hide();
         $('#ranking-card').show();
         $('#chart-card').show();
+        $('#title').val('');
+        $('#title').parent().removeClass('is-dirty');
+        $('#link').val('');
+        $('#link').parent().removeClass('is-dirty');
+        $('#link').parent().removeClass('is-invalid');
+        $('#captcha').val('');
+        $('#captcha').parent().removeClass('is-dirty');
         reloadData();
     });
 
