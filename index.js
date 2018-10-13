@@ -117,20 +117,14 @@ app.post('/add', urlencodedParser, function (req, res) {
                     dbo.collection('films').insertOne(film);
                     db.close();
                     res.send('Dodawanie udało się');
+                    captchaToValue.delete(req.body.hash);
                     console.log('added');
-                    console.log(req.body);
                 }
             });
         });
     } else {
         res.send('Błędne zapytanie');
         console.log('rejected');
-        /*console.log(typeof req.body.title == 'string');
-        console.log(typeof req.body.link == 'string');
-        console.log(typeof req.body.hash == 'string');
-        console.log(typeof req.body.value == 'string');
-        console.log(req.body.hash.length);
-        console.log(req.body.value.length);*/
     }
 });
 
