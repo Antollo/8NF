@@ -118,6 +118,7 @@ app.post('/add', urlencodedParser, function (req, res) {
                     db.close();
                     res.send('Dodawanie udało się');
                     console.log('added');
+                    console.log(req.body);
                 }
             });
         });
