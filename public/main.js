@@ -124,7 +124,7 @@ $(document).ready(function () {
                     if (data == 'Dodawanie udało się') {
                         $('#back').click();
                     }
-                    else $.getJSON('captcha', function (data) {
+                    $.getJSON('captcha', function (data) {
                         $('#captcha-img').html(data.svg);
                         $('#captcha-img').attr('hash', data.hash);
                     });
