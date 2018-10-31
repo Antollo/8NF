@@ -154,16 +154,15 @@ $(document).ready(function () {
     })
 
     $('#easter-egg').click(function () {
-        $('*').each(function() {
-            if ($(this).css('color') == '#134f5c' || $(this).css('color') == 'rgb(19, 79, 92)') {
-                $(this).css({'color':'rgb(233, 30, 99)'});
-            }
-            if ($(this).css('background-color') == '#134f5c' || $(this).css('background-color') == 'rgb(19, 79, 92)') {
-                $(this).css({'background-color':'rgb(233, 30, 99)'});
-            }
 
-        });
-        $('path').css({'fill': 'rgb(233, 30, 99)'});
+        const rules = document.styleSheets[0].cssRules;
+        for (let i = 0; i<rules.length; i++) {
+            if ('style' in rules[i]) for (let property in rules[i].style) {
+                if (rules[i].style[property] == 'rgb(19, 79, 92)')
+                rules[i].style[property] = 'rgb(233, 30, 99)';
+            };
+        }
+        document.styleSheets[0].insertRule('path { fill: rgb(233, 30, 99) !important; }', 0);
         $('img[src="logo8NF.png"]').css({'filter': 'none'});
     })
 });
