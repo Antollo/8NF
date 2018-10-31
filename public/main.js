@@ -69,7 +69,7 @@ $(document).ready(function () {
                 chart: {},
                 bars: 'horizontal',
                 legend: { position: 'none' },
-                colors: ['rgb(233,30,99)']
+                colors: ['rgb(233, 30, 99)']
             };
             var chart = new google.charts.Bar(document.getElementById('chart-div'));
             chart.draw(data, google.charts.Bar.convertOptions(options));
@@ -154,9 +154,16 @@ $(document).ready(function () {
     })
 
     $('#easter-egg').click(function () {
-        $('.mdl-button--colored').css({'color': 'rgb(233,30,99)'});
-        $('.mdl-button--primary.mdl-button--primary.mdl-button--raised, .mdl-button--primary.mdl-button--primary.mdl-button--fab').css({'background-color': 'rgb(233,30,99)'});
-        $('path').css({'fill': 'rgb(233,30,99)'});
+        $('*').each(function() {
+            if ($(this).css('color') == '#134f5c' || $(this).css('color') == 'rgb(19, 79, 92)') {
+                $(this).css({'color':'rgb(233, 30, 99)'});
+            }
+            if ($(this).css('background-color') == '#134f5c' || $(this).css('background-color') == 'rgb(19, 79, 92)') {
+                $(this).css({'background-color':'rgb(233, 30, 99)'});
+            }
+
+        });
+        $('path').css({'fill': 'rgb(233, 30, 99)'});
         $('img[src="logo8NF.png"]').css({'filter': 'none'});
     })
 });

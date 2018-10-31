@@ -143,13 +143,6 @@ h5 {
 
 /* I feel extremely sad for this change. That wasn't my decision. */
 
-.mdl-button.mdl-button--colored {
-    color: #134f5c ;
-}
-
-.mdl-button--primary.mdl-button--primary.mdl-button--raised, .mdl-button--primary.mdl-button--primary.mdl-button--fab {
-    background-color: #134f5c;
-}
 path {
     fill: #134f5c;
 }
