@@ -152,4 +152,11 @@ $(document).ready(function () {
     $('.reload').click(function () {
         reloadData();
     })
+
+    $('#easter-egg').click(function () {
+        $('.mdl-button--colored').css({'color': 'rgb(233,30,99)'});
+        $('.mdl-button--primary.mdl-button--primary.mdl-button--raised, .mdl-button--primary.mdl-button--primary.mdl-button--fab').css({'background-color': 'rgb(233,30,99)'});
+        $('path').css({'fill': 'rgb(233,30,99)'});
+        $('img[src="logo8NF.png"]').css({'filter': 'none'});
+    })
 });
