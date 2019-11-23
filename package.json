@@ -10,13 +10,13 @@
   "author": "Antoni Nowinowski",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "cheerio": "^1.0.0-rc.2",
-    "express": "^4.16.4",
-    "fs": "0.0.1-security",
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "fs": "0.0.2",
     "http": "0.0.0",
-    "mongodb": "^3.1.8",
-    "nodemailer": "^4.6.8",
-    "svg-captcha": "^1.3.11"
+    "mongodb": "^3.3.4",
+    "nodemailer": "^6.3.1",
+    "svg-captcha": "^1.4.0"
   }
 }

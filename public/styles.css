@@ -144,9 +144,10 @@ h5 {
 /* I feel extremely sad for this change. That wasn't my decision. */
 
 path {
-    fill: #134f5c;
+    /*fill: #134f5c;*/
+    fill: rgb(233,30,99);
 }
 
-img[src$="logo8NF.png"] {
+/*img[src$="logo8NF.png"] {
     filter: hue-rotate(calc(191deg - 340deg)) brightness(calc(0.318 / 0.516)) saturate(calc(0.658 / 0.822));
-}
+}*/

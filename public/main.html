@@ -7,13 +7,13 @@
     <meta name="description" content="Głosowanie na filmy 8NF.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>8NF</title>
-    <link rel="stylesheet" href="material.dark-teal.min.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.pink-indigo.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=Barrio" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="js.cookie-2.2.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
     <script src="main.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <link rel="stylesheet" href="styles.css">
@@ -31,7 +31,8 @@
                     <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop">
                         <img src="logo8NF.png" height="128px">
                     </div>
-                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="info-card">
+                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop"
+                        id="info-card">
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">O co chodzi?</h2>
                         </div>
@@ -58,18 +59,21 @@
                             serwer nie przechowuje adresu dłużej niż wymaga tego wysłanie potwierdzenia
                             głosu.
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="text" pattern="^[a-zA-Z0-9.!#$%&'*/=?^_`{|}~-]+@(wp.pl|poczta.onet.pl|o2.pl|interia.pl|op.pl|tlen.pl|gmail.com|poczta.fm|gazeta.pl|go2.pl|yahoo.com|hotmail.com|vp.pl|student.put.poznan.pl)$"
+                                <input class="mdl-textfield__input" type="text"
+                                    pattern="^[a-zA-Z0-9.!#$%&'*/=?^_`{|}~-]+@(wp.pl|poczta.onet.pl|o2.pl|interia.pl|op.pl|tlen.pl|gmail.com|poczta.fm|gazeta.pl|go2.pl|yahoo.com|hotmail.com|vp.pl|student.put.poznan.pl)$"
                                     id="mail" />
                                 <label class="mdl-textfield__label" for="mail">Twój adres mailowy</label>
                                 <span class="mdl-textfield__error">To nie jest poprawny adres mailowy!</span>
                             </div>
                         </div>
                         <div class="mdl-card__actions">
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="agree-button">Ok,
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                                id="agree-button">Ok,
                                 wchodzę w to</a>
                         </div>
                     </div>
-                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="new-card">
+                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop"
+                        id="new-card">
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">Zaproponuj inny film</h2>
                         </div>
@@ -85,7 +89,8 @@
                                 <label class="mdl-textfield__label" for="title">Tytuł</label>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                <input class="mdl-textfield__input" type="text" pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
+                                <input class="mdl-textfield__input" type="text"
+                                    pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
                                     id="link" />
                                 <label class="mdl-textfield__label" for="link">Link do opisu filmu</label>
                                 <span class="mdl-textfield__error">To nie wygląda jak prawidłowy link!</span>
@@ -98,11 +103,14 @@
 
                         </div>
                         <div class="mdl-card__actions">
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="add">Dodaj</a>
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="back">Cofnij</a>
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                                id="add">Dodaj</a>
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                                id="back">Cofnij</a>
                         </div>
                     </div>
-                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="chart-card">
+                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop"
+                        id="chart-card">
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">TOP 10</h2>
                         </div>
@@ -115,7 +123,8 @@
                         </div>
                     </div>
 
-                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="ranking-card">
+                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop"
+                        id="ranking-card">
                         <div class="mdl-card__title mdl-card--expand">
                             <h2 class="mdl-card__title-text">Ranking Filmów</h2>
                         </div>
@@ -140,7 +149,8 @@
                             </button>
                         </div>
                     </div>
-                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop" id="fb-card">
+                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop"
+                        id="fb-card">
                         <div class="mdl-card__title">
                             <h2 class="mdl-card__title-text">Informacje</h2>
                         </div>
@@ -158,12 +168,15 @@
                         </div>
                     </div>
                     <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop">
-                        <dic class="mdl-card__supporting-text" style="padding: 0;">
-                            Zrobione z <i class="material-icons" style="color: rgb(233,30,99); cursor: pointer;" id="easter-egg">favorite</i> przez Antoniego Nowinowskiego.
+                        <div class="mdl-card__supporting-text" style="padding: 0;line-height: 18px">
+                            Zrobione z <i class="material-icons"
+                                style="color: rgb(233,30,99); cursor: pointer; font-size: 14px;"
+                                id="easter-egg">favorite</i> przez Antoniego Nowinowskiego.
                             Specjalne podziękowania dla Adama Pawłowskiego za testy.
                         </div>
                     </div>
-                    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--primary mdl-shadow--4dp"
+                    <button
+                        class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--primary mdl-shadow--4dp"
                         id="floating">
                         <i class="material-icons">add</i>
                     </button>
@@ -172,7 +185,7 @@
         </div>
     </div>
     <div id="spinner" class="mdl-spinner mdl-js-spinner is-active"></div>
-    <div id="darken"></div> 
+    <div id="darken"></div>
 </body>
 
 </html>
