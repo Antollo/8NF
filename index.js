@@ -205,7 +205,7 @@ app.post('/vote', urlencodedParser, function (req, res) {
         var filmTitle = $("<div>").html(req.body.title).text()
         var userMail = req.body.mail
         userMail = userMail.replace('+', '')
-        if (userMail.match(/^[a-zA-Z0-9.!#$%&'*/=?^_`{|}~-]+@(wp.pl|poczta.onet.pl|o2.pl|interia.pl|op.pl|tlen.pl|gmail.com|poczta.fm|gazeta.pl|go2.pl|yahoo.com|hotmail.com|vp.pl|student.put.poznan.pl)$/)) {
+        if (userMail.match(/^[a-zA-Z0-9.!#$%&'*/=?^_`{|}~-]+@(wp.pl|poczta.onet.pl|o2.pl|interia.pl|tlen.pl|gmail.com|poczta.fm|gazeta.pl|go2.pl|yahoo.com|hotmail.com|vp.pl|student.put.poznan.pl)$/)) {
             var hashed = hash(filmTitle + userMail)
             transporter.sendMail(
                 {
