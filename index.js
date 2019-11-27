@@ -136,7 +136,10 @@ app.post('/add', urlencodedParser, function (req, res) {
 
 app.get('/validate/:key', function (req, res) {
     //if (typeof req.params.key == 'number') {
-    var filmTitle = codeToVote.get(req.params.key)
+    var filmTitle = codeToVote.get(req.params.key).title
+    var email = codeToVote.get(req.params.key).email
+
+    console.log('Email adress (voted): ' + email + '\nTitle: ' + filmTitle)
 
     MongoClient.connect(url, function (err, db) {
         if (err) throw err
@@ -144,10 +147,10 @@ app.get('/validate/:key', function (req, res) {
         dbo.collection(collectionName).findOne({ title: filmTitle }, function (err, result) {
             if (err) throw err
             if (result) {
-                if (result.votes.indexOf(req.params.key) == -1) {
+                if (result.votes.indexOf(req.params.key) == -1 & result.votes.indexOf(email) == -1) {
                     dbo.collection(collectionName).updateOne(
                         { title: filmTitle },
-                        { $push: { votes: req.params.key } }
+                        { $push: { votes: email } }
                     )
                     db.close()
                     res.writeHead(200, { 'Content-Type': 'text/html' })
@@ -201,6 +204,7 @@ app.post('/vote', urlencodedParser, function (req, res) {
     if (typeof req.body.title == 'string' && typeof req.body.mail == 'string') {
         var filmTitle = $("<div>").html(req.body.title).text()
         var userMail = req.body.mail
+        userMail = userMail.replace('+', '')
         if (userMail.match(/^[a-zA-Z0-9.!#$%&'*/=?^_`{|}~-]+@(wp.pl|poczta.onet.pl|o2.pl|interia.pl|op.pl|tlen.pl|gmail.com|poczta.fm|gazeta.pl|go2.pl|yahoo.com|hotmail.com|vp.pl|student.put.poznan.pl)$/)) {
             var hashed = hash(filmTitle + userMail)
             transporter.sendMail(
@@ -213,10 +217,10 @@ app.post('/vote', urlencodedParser, function (req, res) {
                         + hashed.toString() + '</a><br>Link jest ważny przez pół godziny więc lepiej się pospiesz.<br>Do zobaczenia na nocy!'
                 }, function (err, info) {
                     if (err) throw err
-                    else console.log('Email sent: ' + info.response)
+                    console.log('Email adress (sent): ' + userMail + '\nBody: ' + info.response)
                 })
             res.send('Wysłano mail z linkiem do potwierdzenia')
-            codeToVote.set(hashed.toString(), filmTitle)
+            codeToVote.set(hashed.toString(), { title: filmTitle, email: userMail })
             setTimeout(function () {
                 codeToVote.delete(hashed)
             }, 1000 * 60 * 30)
