@@ -9,6 +9,7 @@ var fs = require('fs')
 var cheerio = require('cheerio')
 var $ = cheerio.load('')
 var svgCaptcha = require('svg-captcha')
+var crypto = require('crypto')
 svgCaptcha.options.width = 240
 svgCaptcha.options.height = 60
 var bodyParser = require('body-parser')
@@ -54,8 +55,9 @@ app.get('/', function (req, res) {
 app.get('/captcha', function (req, res) {
     var captcha = svgCaptcha.create({ size: 6, ignoreChars: 'O0o1il', noise: 0 })
     res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ svg: captcha.data, hash: hash(captcha.data).toString() }))
-    captchaToValue.set(hash(captcha.data).toString(), captcha.text)
+    var h = hash(captcha.data)
+    res.end(JSON.stringify({ svg: captcha.data, hash: h }))
+    captchaToValue.set(h, captcha.text)
 })
 
 app.get('/base', function (req, res) {
@@ -136,6 +138,12 @@ app.post('/add', urlencodedParser, function (req, res) {
 
 app.get('/validate/:key', function (req, res) {
     //if (typeof req.params.key == 'number') {
+    if(!codeToVote.has(req.params.key)) {
+        res.writeHead(200, { 'Content-Type': 'text/html' })
+        res.write(responseHTML.replace('Wystąpił błąd.', 'Głosowanie nie udało się - link jest nieaktywny.'))
+        res.end()
+        return
+    }
     var filmTitle = codeToVote.get(req.params.key).title
     var email = codeToVote.get(req.params.key).email
 
@@ -213,14 +221,16 @@ app.post('/vote', urlencodedParser, function (req, res) {
                     to: userMail,
                     subject: 'Potwierdzenie głosu na film',
                     html: 'Hej!<br>Jestem botem odpowiedzialnym za głosowanko na filmy, które będą na nocce. Żeby potwierdzić swój głos kliknij tutaj: '
-                        + '<a href="' + appAddress + 'validate/' + hashed.toString() + '">' + appAddress + 'validate/'
-                        + hashed.toString() + '</a><br>Link jest ważny przez pół godziny więc lepiej się pospiesz.<br>Do zobaczenia na nocy!'
+                        + '<a href="' + appAddress + 'validate/' + hashed + '">' + appAddress + 'validate/'
+                        + hashed + '</a><br>Link już jest aktywny będzie ważny przez pół godziny więc lepiej się pospiesz.<br>Do zobaczenia na nocy!'
                 }, function (err, info) {
                     if (err) throw err
                     console.log('Email adress (sent): ' + userMail + '\nBody: ' + info.response)
                 })
-            res.send('Wysłano mail z linkiem do potwierdzenia')
-            codeToVote.set(hashed.toString(), { title: filmTitle, email: userMail })
+            setTimeout(function () {
+                codeToVote.set(hashed, { title: filmTitle, email: userMail })
+                res.send('Wysłano mail z linkiem do potwierdzenia')
+            }, 1000 * 2)
             setTimeout(function () {
                 codeToVote.delete(hashed)
             }, 1000 * 60 * 30)
@@ -236,10 +246,5 @@ var server = app.listen(port, function () {
 })
 
 function hash(str) {
-    var h = 0
-    for (var i = 0; i < str.length; i++) {
-        h = ((h << 5) - h) + str.charCodeAt(i)
-        h |= 0
-    }
-    return h
+    return crypto.createHash('md5').update(str).digest('hex') + Math.random().toString(36).substring(2, 15);
 }
