@@ -155,7 +155,7 @@ app.get('/validate/:key', function (req, res) {
         dbo.collection(collectionName).findOne({ title: filmTitle }, function (err, result) {
             if (err) throw err
             if (result) {
-                if (result.votes.indexOf(req.params.key) == -1 & result.votes.indexOf(email) == -1) {
+                if (result.votes.indexOf(req.params.key) == -1 && result.votes.indexOf(email) == -1 && result.votes.indexOf(oldHash(filmTitle + email))) {
                     dbo.collection(collectionName).updateOne(
                         { title: filmTitle },
                         { $push: { votes: email } }
@@ -246,5 +246,15 @@ var server = app.listen(port, function () {
 })
 
 function hash(str) {
+    return crypto.createHash('md5').update(str).digest('hex') + Math.random().toString(36).substring(2, 15);
+}
+
+function oldHash(str) {
+    var h = 0
+    for (var i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i)
+        h |= 0
+    }
+    return h
     return crypto.createHash('md5').update(str).digest('hex') + Math.random().toString(36).substring(2, 15);
 }
